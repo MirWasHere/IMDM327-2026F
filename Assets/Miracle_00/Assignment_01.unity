@@ -179,7 +179,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 150
+  field of view: 64.8
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -206,7 +206,7 @@ Transform:
   m_GameObject: {fileID: 1085850597}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -600}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -266,13 +266,15 @@ GameObject:
   m_Component:
   - component: {fileID: 1258273130}
   - component: {fileID: 1258273131}
+  - component: {fileID: 1258273133}
+  - component: {fileID: 1258273132}
   m_Layer: 0
   m_Name: Solar System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1258273130
 Transform:
   m_ObjectHideFlags: 0
@@ -300,8 +302,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e47e0554e5ed774fb0d16ed0606bfc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SolarSystem
-  TimeController: 1
+  TimeController: 300000000
   solarBodiesCSV: []
+--- !u!114 &1258273132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258273128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad1f10fbb83a4471884db175d599dd27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DataJSON
+  solarData:
+    bodies: []
+--- !u!114 &1258273133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258273128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95c428e4b08a21143920a9fc8300425a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DataCSV
+  bp: []
 --- !u!1 &1426861968
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1426861970}
   - component: {fileID: 1426861969}
+  - component: {fileID: 1426861971}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -399,6 +429,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1426861971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426861968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &1474257281
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1474257283
 Transform:
   m_ObjectHideFlags: 0

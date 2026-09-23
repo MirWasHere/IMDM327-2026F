@@ -10,7 +10,12 @@ public class SolarSystem : MonoBehaviour
     const float G = 6.674e-11f; // Gravitational constant
     PlanetProperty[] planetProperties;
     private int numberOfSphere = 10;
-    public float TimeController = 1f;
+    public float TimeController = 10f;
+    // Maximum distance of planets from the sun
+    private float[] maxDistance = new float[10];
+    private float[] minimumDistance = new float[10];
+    float attractionForce = 1f;
+    float separationForce = 0.5f;
     class PlanetProperty // why struct?
     {                   // https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/choosing-between-class-and-struct
         public GameObject planet;
@@ -53,9 +58,18 @@ public class SolarSystem : MonoBehaviour
         {
             // Our gameobjects are created here:
             planetProperties[i] = new PlanetProperty();
-            planetProperties[i].planet = GameObject.CreatePrimitive(PrimitiveType.Sphere); 
+            planetProperties[i].planet = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            if( i != 0)
+            {
+                planetProperties[i].planet.transform.localScale = Vector3.one * Mathf.Sqrt(solarBodiesCSV[i].radius / 1e5f);
+            }
+            else
+            {
+                planetProperties[i].planet.transform.localScale = Vector3.one * Mathf.Sqrt(solarBodiesCSV[i].radius / 5e6f);
+            }
         }
 
+        // Getting the data??
         // Apply the loaded data to the simulation. This is where you would set up your bodies in the scene based on the loaded data.
         for (int i = 0; i < solarBodiesCSV.Length; i++)
         {
@@ -68,15 +82,44 @@ public class SolarSystem : MonoBehaviour
             float initialAngle = Random.Range(0f, Mathf.PI * 2f);
             float r = solarBodiesCSV[i].distance;
 
-            planetProperties[i].actualPosition = new Vector3(r * Mathf.Cos(initialAngle), r * Mathf.Sin(initialAngle), 0f);
+            // Scale
+            maxDistance[i] = Mathf.Sqrt(solarBodiesCSV[i].distance / 1e8f) + 10f;
+            minimumDistance[i] = Mathf.Sqrt(solarBodiesCSV[i].distance / 1e8f) - 10f;
+            Debug.Log($"Max distances: {maxDistance[i]}; Max distances: {minimumDistance[i]}");
             
+
+            planetProperties[i].actualPosition = new Vector3(r * Mathf.Cos(initialAngle), r * Mathf.Sin(initialAngle), 0f);
+
             planetProperties[i].velocity = new Vector3(solarBodiesCSV[i].initial_velocity * Mathf.Cos(initialAngle + (Mathf.PI / 2)),
-                     solarBodiesCSV[i].initial_velocity * Mathf.Sin(0f), 0f);
+                     solarBodiesCSV[i].initial_velocity * Mathf.Sin(initialAngle + (Mathf.PI / 2)), 0f);
+
+            // + This is just pretty trails
+            TrailRenderer trailRenderer = planetProperties[i].planet.AddComponent<TrailRenderer>();
+            // Configure the TrailRenderer's properties
+            trailRenderer.time = 100.0f;  // Duration of the trail
+            trailRenderer.startWidth = 0.5f;  // Width of the trail at the start
+            trailRenderer.endWidth = 0.1f;    // Width of the trail at the end
+            // a material to the trail
+            trailRenderer.material = new Material(Shader.Find("Sprites/Default"));
+            // Set the colour gradient along the trail.
+            Gradient gradient = new Gradient();
+            Color targetColor = Color.HSVToRGB((float)i / numberOfSphere, 1f, 1f);
+            gradient.SetKeys(
+                new GradientColorKey[] {
+                    new GradientColorKey(Color.white, 0f), // (color, normalized position)
+                    new GradientColorKey(targetColor, 0.8f)
+                },
+                new GradientAlphaKey[] {
+                    new GradientAlphaKey(1f, 0f), // (alpha, normalized position) 
+                    new GradientAlphaKey(0f, 1f)
+                }
+            );
+            trailRenderer.colorGradient = gradient;
 
         }
     }
     
-    void Update()
+    void FixedUpdate()
     {
         // Loop for N-body gravity
         // How should we design the loop?
@@ -95,14 +138,28 @@ public class SolarSystem : MonoBehaviour
             {
                 // gravity
                 Vector3 distance = planetProperties[i].actualPosition - planetProperties[j].actualPosition;
+                // Debug.Log("Actual Position Pre: " + planetProperties[i].actualPosition);
                 Vector3 gravity = CalculateGravity(distance, planetProperties[i].mass, planetProperties[j].mass);
                 // acceleration
                 planetProperties[i].acceleration -= gravity / planetProperties[i].mass;
                 planetProperties[j].acceleration += gravity / planetProperties[j].mass;
+                
+                Vector3 distSun = planetProperties[i].actualPosition - planetProperties[0].actualPosition;
+
+                if(Mathf.Sqrt(distSun.magnitude / 1e8f) > maxDistance[i])
+                {
+                    planetProperties[i].acceleration -= attractionForce * gravity / planetProperties[i].mass;
+                    planetProperties[j].acceleration += attractionForce * gravity / planetProperties[j].mass;
+                }
+                if(Mathf.Sqrt(distSun.magnitude / 1e8f) < minimumDistance[i])
+                {
+                    planetProperties[i].acceleration += separationForce * gravity / planetProperties[i].mass;
+                    planetProperties[j].acceleration -= separationForce * gravity / planetProperties[j].mass;
+                }
             }
         }
         // 02. Loop through each body to update its velocity and position based on the calculated acceleration
-       for (int i = 0; i < numberOfSphere; i++)
+       for (int i = 0; i < numberOfSphere; i ++)
         {
             // ***WRITE YOUR CODE HERE***
             // velocity
@@ -111,9 +168,12 @@ public class SolarSystem : MonoBehaviour
             planetProperties[i].actualPosition += planetProperties[i].velocity * Time.deltaTime * TimeController;
             // Scale
             float scaledDistance = Mathf.Sqrt(planetProperties[i].actualPosition.magnitude / 1e8f);
-            Debug.Log(scaledDistance);
-            // planetProperties[i].planet.transform.position = scaledDistance * planetProperties[i].actualPosition.normalized;
-
+            if(i != 0)
+            {
+                planetProperties[i].planet.transform.position = scaledDistance * planetProperties[i].actualPosition.normalized;
+                Debug.Log($"Pos: " + planetProperties[i].planet.transform.position);
+            }
+            
         }
     }
 
