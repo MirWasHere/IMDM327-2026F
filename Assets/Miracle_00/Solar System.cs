@@ -13,8 +13,7 @@ public class SolarSystem : MonoBehaviour
     public float TimeController = 10f;
     // Maximum distance of planets from the sun
     private float[] maxDistance = new float[10];
-    private float[] minimumDistance = new float[10];
-    float attractionForce = 1f;
+    float attractionForce = 2f;
     float separationForce = 0.5f;
     class PlanetProperty // why struct?
     {                   // https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/choosing-between-class-and-struct
@@ -65,7 +64,7 @@ public class SolarSystem : MonoBehaviour
             }
             else
             {
-                planetProperties[i].planet.transform.localScale = Vector3.one * Mathf.Sqrt(solarBodiesCSV[i].radius / 5e6f);
+                planetProperties[i].planet.transform.localScale = Vector3.one * Mathf.Sqrt(solarBodiesCSV[i].radius / 1e6f);
             }
         }
 
@@ -84,8 +83,7 @@ public class SolarSystem : MonoBehaviour
 
             // Scale
             maxDistance[i] = Mathf.Sqrt(solarBodiesCSV[i].distance / 1e8f) + 10f;
-            minimumDistance[i] = Mathf.Sqrt(solarBodiesCSV[i].distance / 1e8f) - 10f;
-            Debug.Log($"Max distances: {maxDistance[i]}; Max distances: {minimumDistance[i]}");
+            Debug.Log($"Max distances: {maxDistance[i]}");
             
 
             planetProperties[i].actualPosition = new Vector3(r * Mathf.Cos(initialAngle), r * Mathf.Sin(initialAngle), 0f);
@@ -145,17 +143,16 @@ public class SolarSystem : MonoBehaviour
                 planetProperties[j].acceleration += gravity / planetProperties[j].mass;
                 
                 Vector3 distSun = planetProperties[i].actualPosition - planetProperties[0].actualPosition;
+                
+                if( i > 0 && i < 4)
+                {
+                    if(Mathf.Sqrt(distSun.magnitude / 1e8f) > maxDistance[i])
+                    {
+                        planetProperties[i].acceleration -= attractionForce * gravity / planetProperties[i].mass;
+                        planetProperties[j].acceleration += attractionForce * gravity / planetProperties[j].mass;
+                    }
+                }
 
-                if(Mathf.Sqrt(distSun.magnitude / 1e8f) > maxDistance[i])
-                {
-                    planetProperties[i].acceleration -= attractionForce * gravity / planetProperties[i].mass;
-                    planetProperties[j].acceleration += attractionForce * gravity / planetProperties[j].mass;
-                }
-                if(Mathf.Sqrt(distSun.magnitude / 1e8f) < minimumDistance[i])
-                {
-                    planetProperties[i].acceleration += separationForce * gravity / planetProperties[i].mass;
-                    planetProperties[j].acceleration -= separationForce * gravity / planetProperties[j].mass;
-                }
             }
         }
         // 02. Loop through each body to update its velocity and position based on the calculated acceleration

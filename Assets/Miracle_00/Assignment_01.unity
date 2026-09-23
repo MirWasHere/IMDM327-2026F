@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e47e0554e5ed774fb0d16ed0606bfc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SolarSystem
-  TimeController: 300000000
+  TimeController: 10000000
   solarBodiesCSV: []
 --- !u!114 &1258273132
 MonoBehaviour:
