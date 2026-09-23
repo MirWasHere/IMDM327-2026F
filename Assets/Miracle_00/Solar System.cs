@@ -2,7 +2,7 @@
 // Use CSV or JSON to load data into the simulation. Both formats are supported, but they use different data types. 
 // The CSV format uses a struct, while the JSON format uses a class. This script demonstrates how to load both formats and access their data.
 using UnityEngine;
-public class SolarSystemStarter : MonoBehaviour
+public class SolarSystem : MonoBehaviour
 {
     // These components can be attached independently.
     DataCSV solarCSV;

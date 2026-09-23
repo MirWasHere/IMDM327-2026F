@@ -6,7 +6,7 @@ using System.Collections;
 // using UnityEngine.InputSystem;
 
 
-public class ThreeBody : MonoBehaviour
+public class NBody : MonoBehaviour
 {
     public float G = 500f; // Gravitational constant for this simulation, not the real-world value.
     public float minimumDistance = 3f;
