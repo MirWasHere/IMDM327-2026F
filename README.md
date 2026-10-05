@@ -19,6 +19,10 @@ Open the project in Unity and start with `Assets/327_CourseMaterial/Scenes/00_Wo
 
 ![Sound](https://github.com/user-attachments/assets/348a0502-0e68-42f1-b30e-58dc77cb91aa)
 
+## Video
+
+[![Watch the video on YouTube](https://img.youtube.com/vi/5UXLY4lZ8zo/hqdefault.jpg)](https://www.youtube.com/watch?v=5UXLY4lZ8zo)
+
 ## License
 
 Course material code is released under the [MIT License](LICENSE). Third-party packages and assets retain their own licenses.
