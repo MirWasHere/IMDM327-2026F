@@ -14,8 +14,11 @@ The course introduces computation, trails, flocking, data, XR interaction, sound
 | 2. Data | `DataCSV.cs`, `DataJSON.cs`, `SolarSystemStarter.cs` | Load data and use it in a simulation |
 | 3. Sound | `SoundFM.cs`, `SoundFMPiano.cs`, `AudioSpectrum.cs` | FM synthesis, notes, and audio visualization |
 | 4. Flocking + sound | `PianoBoids.cs`, `FlockingSynth.cs`, `BoidFMSynth.cs` | Connect boid motion and sound parameters |
+| 5. Gesture interaction | `MediaPipeBodyTracker.cs`, `InteractiveBody.cs` | Webcam landmarks and hand-controlled gravity |
 
 Open the project in Unity and start with `Assets/327_CourseMaterial/Scenes/00_World.unity`. Scripts are in `Assets/327_CourseMaterial/Scripts`.
+
+Gesture scenes are in `Assets/327_CourseMaterial/Scenes/Gesture`: `Gesture-basic` shows landmarks; `Gesture-flocking` adds boids. Select `MediaPipe` to toggle Debug Mode or use Show/Hide landmarks. Pinch and shake either hand to attract the boids. Stronger shaking creates stronger gravity, which fades when you stop moving. These samples use a desktop webcam and the bundled Windows MediaPipe runtime.
 
 ![Sound](https://github.com/user-attachments/assets/348a0502-0e68-42f1-b30e-58dc77cb91aa)
 
