@@ -14,7 +14,7 @@ public class SolarSystem : MonoBehaviour
     // Maximum distance of planets from the sun
     private float[] maxDistance = new float[10];
     float attractionForce = 2f;
-    float separationForce = 0.5f;
+    // float separationForce = 0.5f;
     class PlanetProperty // why struct?
     {                   // https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/choosing-between-class-and-struct
         public GameObject planet;
