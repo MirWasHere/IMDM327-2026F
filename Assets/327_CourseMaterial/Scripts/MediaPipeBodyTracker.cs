@@ -12,9 +12,9 @@ public class MediaPipeBodyTracker : MonoBehaviour
 
     [Header("Hand Data")]
     [SerializeField] private Vector3 leftHandPosition;
-    [SerializeField] private bool leftHandPinch;
+    [SerializeField] public bool leftHandPinch;
     [SerializeField] private Vector3 rightHandPosition;
-    [SerializeField] private bool rightHandPinch;
+    [SerializeField] public bool rightHandPinch;
 
     [Header("Body Data")]
     [SerializeField] private Vector3 torsoPosition;
@@ -27,7 +27,7 @@ public class MediaPipeBodyTracker : MonoBehaviour
     [SerializeField] private int posePacketCount;
 
     [Header("Detection Settings")]
-    [SerializeField, Range(0.001f, 0.2f)] private float pinchThreshold = 0.035f;
+    [SerializeField, Range(0.001f, 0.2f)] private float pinchThreshold = 0.0f;
 
     private readonly object dataLock = new object();
     private Vector3 pendingLeftHandPosition;

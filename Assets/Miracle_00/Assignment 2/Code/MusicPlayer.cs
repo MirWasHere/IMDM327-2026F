@@ -9,6 +9,8 @@ public class MusicPlayer : MonoBehaviour
 {
     [SerializeField] private HandTracker hands;
 
+    [SerializeField] private LoopingBeat beat;
+
     // Access UI for now to see what instrument is being pushed
     [SerializeField] private TextMeshProUGUI temp_fingerings;
 
@@ -77,10 +79,8 @@ public class MusicPlayer : MonoBehaviour
         {
             string combo = leftHand + " " + rightHand;
 
-            // Debug.Log(combo);
-            if(String.Compare(notes[i], combo) == 0)
+            if(String.Compare(fingPatts[i], combo) == 0)
             {
-                Debug.Log($"Note played: {notes[i]}");
                 notePlayed += notes[i];
                 break;
             }
