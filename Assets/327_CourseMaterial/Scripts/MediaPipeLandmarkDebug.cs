@@ -15,7 +15,8 @@ public class MediaPipeLandmarkDebug : MonoBehaviour
 
     private NormalizedLandmarkList leftHandLandmarks, rightHandLandmarks, poseLandmarks, faceLandmarks;
     private readonly object dataLock = new object();
-    private GameObject[] leftHandDots, rightHandDots, poseDots, faceDots;
+    public GameObject[] leftHandDots, rightHandDots;
+    private GameObject[] poseDots, faceDots;
     private GameObject debugPoints;
     private Material material;
     private Coroutine subscribeRoutine;
