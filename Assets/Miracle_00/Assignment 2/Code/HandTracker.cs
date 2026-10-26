@@ -3,8 +3,8 @@ using System.Collections;
 
 public class HandTracker : MonoBehaviour
 {
-    // Max distance between finger top and base; what distance determines bend in each finger
-    public float[] maxDistanceLeft, maxDistanceRight, bentLeft, bentRight;
+    // Max distance between finger top and base; what distance determines bend in each finger; current fing point distance
+    private float[] maxDistanceLeft, maxDistanceRight, bentLeft, bentRight, currDistLeft, currDistRight;
 
     // Holds the mediapipe reference
     [SerializeField] private MediaPipeLandmarkDebug landmarks;
@@ -13,15 +13,23 @@ public class HandTracker : MonoBehaviour
     public bool[] fDownLeft, fDownRight;
 
     // Callibration checks
-    public bool calLeft = false, calRight = false;
+    private bool calLeft, calRight;
+    public bool fullCal;
+
+    private float thresholdRatio = 0.5f;
 
     void Start()
     {
+        // Setting up some arrays...
         bentLeft = new float[4];
         bentRight = new float[4];
 
         fDownLeft = new bool[4];
         fDownRight = new bool[4];
+
+        // ...and bools
+        calLeft = false;
+        calRight = false;
     }
 
     // Update is called once per frame
@@ -33,32 +41,55 @@ public class HandTracker : MonoBehaviour
             maxDistanceLeft = GetDistances(landmarks.leftHandDots);
             calLeft = true;
 
-            Debug.Log("bent left length: " + bentLeft.Length);
-
-            // The distance must be 1/3 of the total distance in order to be considered bent
+            // The distance must be 1/2 of the total distance in order to be considered bent
             for(int i = 0; i < 4; i ++)
             {
-                bentLeft[i] = maxDistanceLeft[i] * 0.3f;
+                bentLeft[i] = maxDistanceLeft[i] * thresholdRatio;
             }
         }
 
+        // Everything as above... except for the right hand
         else if(Input.GetKeyDown(KeyCode.LeftShift))
         {
             maxDistanceRight = GetDistances(landmarks.rightHandDots);
             calRight = true;
 
-            // The distance must be 1/3 of the total distance in order to be considered bent
             for(int i = 0; i < 4; i ++)
             {
-                bentRight[i] = maxDistanceRight[i] * 0.3f;
+                bentRight[i] = maxDistanceRight[i] * thresholdRatio;
             }
         }
 
         // Only check for fingerings if the user measure distances for both
         if(calLeft && calRight)
         {
-            // Go through each array to check if the fingers are bent
+            fullCal = true;
+            // Check the distances each frame
+            currDistLeft = GetDistances(landmarks.leftHandDots);
+            currDistRight = GetDistances(landmarks.rightHandDots);
 
+            // Go through each array to check if the fingers are bent
+            for(int i = 0; i < 4; i ++)
+            {
+                // if the currDistance is less than the threshold distance, mark as bent
+                if(currDistLeft[i] <= bentLeft[i])
+                {
+                    fDownLeft[i] = true;
+                }
+                else
+                {
+                    fDownLeft[i] = false;
+                }
+
+                if(currDistRight[i] <= bentRight[i])
+                {
+                    fDownRight[i] = true;
+                }
+                else
+                {
+                    fDownRight[i] = false;
+                }
+            }
         }
         
     }
