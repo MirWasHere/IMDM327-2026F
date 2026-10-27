@@ -522,6 +522,8 @@ GameObject:
   - component: {fileID: 726710223}
   - component: {fileID: 726710226}
   - component: {fileID: 726710225}
+  - component: {fileID: 726710228}
+  - component: {fileID: 726710227}
   m_Layer: 0
   m_Name: Sound Generator
   m_TagString: Untagged
@@ -575,7 +577,7 @@ AudioReverbFilter:
   m_DryLevel: 0
   m_Room: 0
   m_RoomHF: 0
-  m_DecayTime: 7.77
+  m_DecayTime: 4.1
   m_DecayHFRatio: 0.5
   m_ReflectionsLevel: -10000
   m_ReverbLevel: 940
@@ -684,6 +686,34 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &726710227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726710222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1486eb94e82243ad915952a8203c6021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSpectrumPlot
+  scale: 10
+  displayBins: 512
+  plotWidth: 10
+  origin: {x: -5, y: -2, z: 0}
+--- !u!114 &726710228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726710222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9784afb27e2a4caa90d5baab035c9f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSpectrum
 --- !u!1 &990929715
 GameObject:
   m_ObjectHideFlags: 0
