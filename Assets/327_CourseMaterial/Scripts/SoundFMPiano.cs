@@ -104,6 +104,7 @@ public class SoundFMPiano : MonoBehaviour
         for (int i = 0; i < Keys.Length; i++)
         {
             int offset = i < 11 ? WhiteNotes[i] : BlackNotes[i - 11];
+            Debug.Log(offset);
             if (offset < 0) continue; // No black key between E-F or B-C.
             if (Input.GetKeyDown(Keys[i]))
             {

@@ -14,6 +14,9 @@ public class MusicPlayer : MonoBehaviour
     // Access UI for now to see what instrument is being pushed
     [SerializeField] private TextMeshProUGUI temp_fingerings;
 
+    // Will send the note played and harmonize the notes based on that
+    [SerializeField] private Harmonizer harmonizer;
+
     // All possible notes
     private string[] notes;
 
@@ -31,7 +34,7 @@ public class MusicPlayer : MonoBehaviour
     void Start()
     {
         // Possible Notes (big C is octave higher)
-        notes = new string[] {"c", "D", "E", "F", "F#", "G", "G#", "A", "Bb", "E", "C"};
+        notes = new string[] {"c", "D", "E", "F", "F#", "G", "G#", "A", "Bb", "B", "C"};
 
         // Finger patterns
         fingPatts = new string[]
@@ -82,11 +85,43 @@ public class MusicPlayer : MonoBehaviour
             if(String.Compare(fingPatts[i], combo) == 0)
             {
                 notePlayed += notes[i];
+                harmonizer.PlayHarmony(notes[i]);
                 break;
             }
         }
 
 
         temp_fingerings.text = "LEFT: [ " + leftHand + " ] \nRIGHT: [ " + rightHand + " ]\nNOTE: " + notePlayed; 
+        
+    }
+
+    // Instead of printing the fingering and note, just return the string of note played.
+    public string GetNote()
+    {
+        string leftHand = "";
+        string rightHand = "";
+        string notePlayed = "";
+
+        // Display what notes are being played
+        for(int i = 0; i < 4; i ++)
+        {
+            leftHand += (hands.fDownLeft[i]? "1" : "0");
+            rightHand += (hands.fDownRight[i]? "1" : "0");
+        }
+
+        // Check what note it is and add that, too
+        for(int i = 0; i < notes.Length; i ++)
+        {
+            string combo = leftHand + " " + rightHand;
+
+            if(String.Compare(fingPatts[i], combo) == 0)
+            {
+                notePlayed += notes[i];
+                harmonizer.PlayHarmony(notes[i]);
+                break;
+            }
+        }
+
+        return notePlayed;
     }
 }
