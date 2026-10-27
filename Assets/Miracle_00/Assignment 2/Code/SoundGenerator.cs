@@ -36,10 +36,7 @@ public class SoundGenerator : MonoBehaviour
     [SerializeField] private MusicPlayer musPlay;
 
     // // All possible notes; in place of Keys
-    // static readonly string[] Fingers = 
-    // {
     //     "c", "D", "E", "F", "F#", "G", "G#", "A", "Bb", "B", "C"
-    // };
     // //  0     1    2    3    14    4   15     5    16   6     7
 
     static readonly string[] Fingers = 
@@ -47,7 +44,8 @@ public class SoundGenerator : MonoBehaviour
         "c", "D", "E", "F", "G",  "A", "B", "C", "F#", "G#", "Bb"
     };
 
-    // Notes: "c", "D", "E", "F", "F#", "G", "G#", "A", "Bb", "B", "C"
+    // ONLY PLAY ONE NOTE AT A TIME!!!
+    private bool noteIsPlaying = false;
 
     // Based on NoteNames index!
     static readonly int[] WhiteNotes = {0, 2, 4, 5, 7, 14, 16};
@@ -141,21 +139,24 @@ public class SoundGenerator : MonoBehaviour
             }
 
             // Find what input we had (and making sure it's not an unavailable note)
-            if(string.Compare(musPlay.GetNote(), Fingers[i]) == 0)
+            if(!noteIsPlaying && string.Compare(musPlay.GetNote(), Fingers[i]) == 0)
             {
                 int midi = Mathf.Clamp(rootMidi + offset, 0, 127);
                 heldKeys[i] = true;
                 heldMidi[i] = midi;
                 Enqueue(i, true, 440f * Mathf.Pow(2f, (midi - 69) / 12f));
 
-                // Only one note can be played at a time
-                break;
+                // A note is playing, so we can't have any other notes play
+                noteIsPlaying = true;
             }
             // Now we deque if it is released
             if (heldKeys[i] && string.Compare(musPlay.GetNote(), Fingers[i]) != 0)
             {
                 heldKeys[i] = false;
                 Enqueue(i, false, 0f);
+
+                // No other notes are playing, free space
+                noteIsPlaying = false;
             }
         }
     }
