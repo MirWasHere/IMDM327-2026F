@@ -16,6 +16,8 @@ public class Boids : MonoBehaviour
     public float separationForce = 10f;
     public float attractionForce = 10f;
 
+    private float time = 0;
+
     // Holds the moving bodies
     Flyer[] boids;
 
@@ -47,12 +49,10 @@ public class Boids : MonoBehaviour
             float theta = i * increments;
             Vector3 initPos = new Vector3(radius * Mathf.Cos(theta), radius * Mathf.Sin(theta), 100);
 
-            boids[i].body = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            boids[i].body.transform.position = initPos;
-            //Instantiate(leaves, initPos, Quaternion.identity);
-            boids[i].mass = Random.Range(1, 5);
+            boids[i].body = Instantiate(leaves, initPos, Quaternion.identity);
+            boids[i].mass = 1;
 
-            boids[i].velocity = Vector3.zero;
+            boids[i].velocity = new Vector3(1, 1, 1);
 
 
             // + This is just pretty trails
@@ -86,6 +86,8 @@ public class Boids : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Measure Time 
+        time += Time.deltaTime;
         // The radius of every other note will be determined by the midi number
         int notePlayed = (musPlay.GetNoteIndex() == -1 ? 0 : musPlay.GetNoteIndex());
         // Deciding whether to add or substract the midi from the radius
@@ -98,7 +100,7 @@ public class Boids : MonoBehaviour
             boids[i].acceleration = Vector3.zero;
         }
 
-        /*
+    /*
         // Go through each boid and determine the new position
         for(int i = 0; i < numBoids; i ++)
         {
@@ -116,7 +118,7 @@ public class Boids : MonoBehaviour
 
             boids[i].body.transform.position = newVel;
         }
-        */
+    */
 
         for(int i = 0; i < numBoids; i ++)
         {
@@ -144,17 +146,26 @@ public class Boids : MonoBehaviour
         for(int i = 0; i < numBoids; i ++)
         {
             // Slow down the boids if they stop moving
-            // if(musPlay.GetNoteIndex() == -1)
-            // {
-            //     boids[i].velocity -= boids[i].acceleration * Time.deltaTime * fastTime;
-            // }
+            if(musPlay.GetNoteIndex() == -1)
+            {
+                // Vector3 initPos = boids[i].body.transform.position;
+                // Vector3 endPos = new Vector3(1, 1, 1);
+                // float lerpFraction = time / 60f;
+
+                // boids[i].body.transform.position = Vector3.Lerp(initPos, endPos, lerpFraction);
+                
+                boids[i].velocity -= Vector3.zero;
+                // boids[i].acceleration * Time.deltaTime * fastTime;
+                boids[i].body.transform.position += boids[i].velocity * Time.deltaTime * fastTime;
+            }
             // Otherwise, scale to the midi
-            // else
-            // {
+            else
+            {
                 boids[i].velocity += boids[i].acceleration * Time.deltaTime * fastTime;
-            // }
+                boids[i].body.transform.position += boids[i].velocity * Time.deltaTime * fastTime;
+            }
             
-            boids[i].body.transform.position += boids[i].velocity * Time.deltaTime * fastTime;
+            
         }
         
     }
