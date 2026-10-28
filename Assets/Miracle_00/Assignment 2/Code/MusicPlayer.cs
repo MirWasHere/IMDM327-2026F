@@ -17,6 +17,9 @@ public class MusicPlayer : MonoBehaviour
     // Will send the note played and harmonize the notes based on that
     [SerializeField] private Harmonizer harmonizer;
 
+    // Will show what fingers are down
+    [SerializeField] private Image[] fingers;
+
     // All possible notes
     private string[] notes;
 
@@ -51,6 +54,13 @@ public class MusicPlayer : MonoBehaviour
                     "0001 0000" // C
                     };
 
+        for(int i = 0; i < fingers.Length; i ++)
+        {
+            fingers[i].enabled = (false);
+        }
+
+        
+        temp_fingerings.text = "";
     }
 
     // Update is called once per frame
@@ -73,8 +83,29 @@ public class MusicPlayer : MonoBehaviour
         // Display what notes are being played
         for(int i = 0; i < 4; i ++)
         {
-            leftHand += (hands.fDownLeft[i]? "1" : "0");
-            rightHand += (hands.fDownRight[i]? "1" : "0");
+            // leftHand += (hands.fDownLeft[i]? "1" : "0");
+            if(hands.fDownLeft[i])
+            {
+                leftHand += "1";
+                fingers[i].enabled = true;
+            }
+            else
+            {
+                leftHand += "0";
+                fingers[i].enabled = (false);
+            }
+            
+            // rightHand += (hands.fDownRight[i]? "1" : "0");
+            if(hands.fDownRight[i])
+            {
+                rightHand += "1";
+                fingers[i + 4].enabled = (true);
+            }
+            else
+            {
+                rightHand += "0";
+                fingers[i + 4].enabled = (false);
+            }
         }
 
         // Check what note it is and add that, too
@@ -91,7 +122,7 @@ public class MusicPlayer : MonoBehaviour
         }
 
 
-        temp_fingerings.text = "LEFT: [ " + leftHand + " ] \nRIGHT: [ " + rightHand + " ]\nNOTE: " + notePlayed; 
+        // temp_fingerings.text = "LEFT: [ " + leftHand + " ] \nRIGHT: [ " + rightHand + " ]\nNOTE: " + notePlayed; 
         
     }
 
