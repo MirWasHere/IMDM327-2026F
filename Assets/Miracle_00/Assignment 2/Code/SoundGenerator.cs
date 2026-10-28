@@ -41,18 +41,19 @@ public class SoundGenerator : MonoBehaviour
 
     static readonly string[] Fingers = 
     {
-        "c", "D", "E", "F", "G",  "A", "B", "C", "F#", "G#", "Bb"
+        "c", "D", "E", "F", "G", "A", "B", "C", 
+        "F#", "G#", "Bb"
     };
 
     // ONLY PLAY ONE NOTE AT A TIME!!!
     private bool noteIsPlaying = false;
 
     // Based on NoteNames index!
-    static readonly int[] WhiteNotes = {0, 2, 4, 5, 7, 14, 16};
-    static readonly int[] BlackNotes = {1, 3, 6, 15};
+    static readonly int[] WhiteNotes = {0, 2, 4, 5, 7, 9, 11, 12};
+    static readonly int[] BlackNotes = {6, 8, 10};
 
     static readonly string[] NoteNames =
-        { "C", "D", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+        { "C", "D", "E", "F", "F#", "G", "G#", "A", "Bb", "B" };
     const double TwoPi = Math.PI * 2.0;
 
     struct Voice
@@ -127,15 +128,15 @@ public class SoundGenerator : MonoBehaviour
             // Get whether it's the black or white note
             int offset = -1;
 
-            if(i < 7)
+            if(i < 8)
             {
                 Debug.Log("WHITE: " + i);
                 offset = WhiteNotes[i];
             }
             else
             {
-                Debug.Log("BLACK: " + (i - 7));
-                offset = BlackNotes[i - 7];
+                Debug.Log("BLACK: " + (i - 8));
+                offset = BlackNotes[i - 8];
             }
 
             // Find what input we had (and making sure it's not an unavailable note)

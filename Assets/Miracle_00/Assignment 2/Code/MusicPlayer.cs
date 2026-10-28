@@ -124,4 +124,33 @@ public class MusicPlayer : MonoBehaviour
 
         return notePlayed;
     }
+
+    // Getting the index of the note played
+    public int GetNoteIndex()
+    {
+        string leftHand = "";
+        string rightHand = "";
+
+        // Display what notes are being played
+        for(int i = 0; i < 4; i ++)
+        {
+            leftHand += (hands.fDownLeft[i]? "1" : "0");
+            rightHand += (hands.fDownRight[i]? "1" : "0");
+        }
+
+        // Check what note it is and add that, too
+        for(int i = 0; i < notes.Length; i ++)
+        {
+            string combo = leftHand + " " + rightHand;
+
+            if(String.Compare(fingPatts[i], combo) == 0)
+            {
+                // Return the index of played note
+                return i;
+            }
+        }
+
+        // If no note is playing
+        return -1;
+    }
 }
